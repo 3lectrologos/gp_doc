@@ -1,0 +1,84 @@
+\documentclass{article}
+
+\usepackage{pgfplots}
+
+\usepackage{amsmath}
+
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
+
+\usepackage{placeins}
+
+\usetikzlibrary{external}
+\tikzexternalize
+%\tikzset{external/force remake}
+\tikzsetexternalprefix{figures/}
+
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
+\newlength\figureheight
+\newlength\figurewidth
+
+\setlength{\textwidth}{7.5in}
+\setlength{\marginparwidth}{0.75in}
+\setlength{\hoffset}{-1.4in}
+\setlength{\voffset}{-1in}
+\addtolength{\textheight}{2in}
+\addtolength{\footskip}{-0.5in}
+
+\begin{document}
+% Setting the figure dimensions is optional (see above).
+\setlength\figureheight{2.2in}
+\setlength\figurewidth{0.27\textwidth}
+
+\begin{figure}[h]
+\centering
+\input{gs_bgape_hg1_res20.tex}
+\vspace{-2em}
+\caption{BGA-PE measurements -- Squared exponential kernel}
+\vspace{2em}
+\input{gs_bgape_hg2_res20.tex}
+\vspace{-2em}
+\caption{BGA-PE measurements -- Matern-3 kernel}
+\vspace{2em}
+\input{gs_bgape_hg3_res20.tex}
+\vspace{-2em}
+\caption{BGA-PE measurements -- Matern-5 kernel}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\input{gs_chl_hg1_res20.tex}
+\vspace{-2em}
+\caption{Chlorophyll measurements -- Squared exponential kernel}
+\vspace{2em}
+\input{gs_chl_hg2_res20.tex}
+\vspace{-2em}
+\caption{Chlorophyll measurements -- Matern-3 kernel}
+\vspace{2em}
+\input{gs_chl_hg3_res20.tex}
+\vspace{-2em}
+\caption{Chlorophyll measurements -- Matern-5 kernel}
+\end{figure}
+
+\FloatBarrier
+
+\begin{table}[h]
+  \centering
+  \caption{Maximum marginal likelihood values for different GP kernels.}
+  \vspace{1em}
+  \label{tab:preb_time}
+  \begin{tabularx}{\textwidth}{l  *{3}{>{\centering\arraybackslash}X}}
+    \toprule
+    Measurement type & Squared exponential & Matern-3 & Matern-5\\
+    \midrule
+    BGA-PE & -1658.8 & -1656.6 & \textbf{-1651.2}\\
+    \midrule
+    Chlorophyll & 894.0 & \textbf{904.4} & 903.4\\
+    \bottomrule
+  \end{tabularx}
+\vspace*{-1em}
+\end{table}
+
+\end{document}
