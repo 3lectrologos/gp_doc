@@ -6,9 +6,11 @@
 
 \usepackage{tabularx}
 \usepackage{array}
-\usepackage{booktabs}
+\usepackage{booktabs} % Nicer tables (/toprule, etc.)
 
-\usepackage{placeins}
+\usepackage{placeins} % FloatBarrier
+
+\usepackage{caption}  % New line in caption
 
 \usetikzlibrary{external}
 \tikzexternalize
@@ -28,10 +30,17 @@
 \addtolength{\footskip}{-0.5in}
 
 \begin{document}
-% Setting the figure dimensions is optional (see above).
+\section{Gridsearch}
+\setlength\figureheight{3in}
+\setlength\figurewidth{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\input{kstest.tex}
+\caption{2-D Kolmogorov-Smirnov test.}
+\end{figure}
+
 \setlength\figureheight{2.2in}
 \setlength\figurewidth{0.27\textwidth}
-
 \begin{figure}[h]
 \centering
 \input{gs_bgape_hg1_res20.tex}
@@ -73,12 +82,32 @@
     \toprule
     Measurement type & Squared exponential & Matern-3 & Matern-5\\
     \midrule
-    BGA-PE & -1658.8 & -1656.6 & \textbf{-1651.2}\\
+    BGA-PE & -1593.7 & -1593.1 & \textbf{-1586.4}\\
     \midrule
-    Chlorophyll & 894.0 & \textbf{904.4} & 903.4\\
+    Chlorophyll & 863.5 & \textbf{874.5} & 873.6\\
     \bottomrule
   \end{tabularx}
 \vspace*{-1em}
 \end{table}
+
+\section{Bootstrap}
+\setlength\figureheight{2in}
+\setlength\figurewidth{0.5\textwidth}
+\begin{figure}[h]
+\centering
+\input{bootstrap.tex}
+\caption{Bootstrap marginal likelihood estimates for BGA-PE and Chlorophyll measurements (B = 1000 bootstrap samples).}
+\end{figure}
+
+\section{Jackknife}
+\setlength\figureheight{2.7in}
+\setlength\figurewidth{0.4\textwidth}
+\begin{figure}[!h]
+\centering
+\input{jk_bgape.tex}
+\hfill
+\input{jk_chl.tex}
+\caption{Jackknife marginal likelihood estimates for BGA-PE (left) and Chlorophyll (right) measurements.}
+\end{figure}
 
 \end{document}

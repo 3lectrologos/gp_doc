@@ -1,0 +1,117 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0.5, xmax=2.5,
+xtick={1,2},
+xticklabels={BGA-PE,Chlorophyll},
+ymin=-1600, ymax=-1400,
+ylabel={Marginal likelihood (BGA-PE)},
+axis lines*=left,
+legend style={at={(0.97,0.03)},anchor=south east,fill=none,draw=none,align=left}]
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=blue,draw=blue}
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1521.39400748918)+-(0.0,36.0036474580811) 
+};
+\addlegendentry{SE};
+
+\addplot [
+color=green!50!black,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=green!50!black,draw=green!50!black}
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1457.37164422112)+-(0.0,26.779507719677) 
+};
+\addlegendentry{Matern-3};
+
+\addplot [
+color=red,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=red,draw=red}
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1470.59017706139)+-(0.0,31.5926002430356) 
+};
+\addlegendentry{Matern-5};
+
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0.5, xmax=2.5,
+ymin=850, ymax=1050,
+xtick=\empty,
+ylabel={Marginal likelihood (Chlorophyll)},
+axis lines*=right]
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=blue,draw=blue},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (2,939.78274144589)+-(0.0,25.0766611456907) 
+};
+\addplot [
+color=green!50!black,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=green!50!black,draw=green!50!black},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (2,989.642036125611)+-(0.0,24.6451640812134) 
+};
+\addplot [
+color=red,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=red,draw=red},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (2,963.652563433425)+-(0.0,26.085767844971) 
+};
+\end{axis}
+\end{tikzpicture}%

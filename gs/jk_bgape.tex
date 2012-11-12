@@ -1,0 +1,91 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0, xmax=60,
+xlabel={Jackknife block size},
+ymin=-1700, ymax=-1200,
+ylabel={Marginal likelihood},
+axis lines*=left,
+legend style={at={(0.97,0.03)},anchor=south east,fill=none,draw=none,align=left}]
+\addplot [
+color=blue,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (1,-1586.85283832393)(5,-1559.39511625785)(10,-1525.05792519669)(20,-1455.81865224992)(50,-1248.46889195148) 
+};
+\addlegendentry{SE};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=blue,draw=blue},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1586.85283832393)+-(0.0,39.5571003066746)(5,-1559.39511625785)+-(0.0,33.4196176834769)(10,-1525.05792519669)+-(0.0,47.4100790804644)(20,-1455.81865224992)+-(0.0,45.4005437984392)(50,-1248.46889195148)+-(0.0,30.6491231799776) 
+};
+\addplot [
+color=green!50!black,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (1,-1586.37299856794)(5,-1559.49157310758)(10,-1525.93549841109)(20,-1458.26267953568)(50,-1253.917152757) 
+};
+\addlegendentry{Matern-3};
+
+\addplot [
+color=green!50!black,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=green!50!black,draw=green!50!black},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1586.37299856794)+-(0.0,37.822900877766)(5,-1559.49157310758)+-(0.0,41.4625804672928)(10,-1525.93549841109)+-(0.0,33.2982247453933)(20,-1458.26267953568)+-(0.0,22.8538849157039)(50,-1253.917152757)+-(0.0,23.7527280222096) 
+};
+\addplot [
+color=red,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (1,-1579.75186811342)(5,-1553.25791643135)(10,-1519.89484797579)(20,-1453.10533383534)(50,-1254.95523355751) 
+};
+\addlegendentry{Matern-5};
+
+\addplot [
+color=red,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=red,draw=red},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (1,-1579.75186811342)+-(0.0,39.350063297079)(5,-1553.25791643135)+-(0.0,31.0996951579727)(10,-1519.89484797579)+-(0.0,34.6621865059119)(20,-1453.10533383534)+-(0.0,36.2621067554169)(50,-1254.95523355751)+-(0.0,38.8131508517022) 
+};
+\end{axis}
+\end{tikzpicture}%
