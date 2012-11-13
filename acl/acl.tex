@@ -135,7 +135,7 @@ The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
 model to guide the selection of the next point to be evaluated.
 
-\subsection{The \acl Algorithm}
+\subsection{The \acl algorithm}
 At each iteration $t \geq 1$ the algorithm maintains a set $U_t$ of yet
 unclassified points, a set $H_t$ of points classified as lying above
 the threshold, and a set $L_t$ of points classified as lying below the
@@ -218,7 +218,6 @@ $\hat{L}$ are returned  (lines~26--27).
     \LET{$U_t$}{$U_{t-1}$}
     \FORALL{$\*x \in U_{t-1}$}
       \LET{$C_{t}(\*x)$}{$C_{t-1}(\*x) \cap Q_t(\*x)$}
-      \LET{$w_{t}(\*x)$}{$\max(C_{t}(\*x)) - \min(C_{t}(\*x))$}
       \IF{$\min(C_t(\*x)) + \epsilon \geq h$}
         \LET{$U_t$}{$U_t \setminus \{\*x\}$}
         \LET{$H_t$}{$H_t \cup \{\*x\}$}
@@ -237,7 +236,7 @@ $\hat{L}$ are returned  (lines~26--27).
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Theoretical Analysis of \acl}
+\subsection{Theoretical analysis of \acl}
 The convergence analysis of \acl is based on the regularity of the GP kernel
 quantified by the maximum information gain of $t$ sampled points
 \begin{align*}
@@ -277,6 +276,42 @@ misclassified by more than $\epsilon$, that is
 \theoremref{thm:acl} is proven using
 Lemmas~\ref{lem:srin1}--\ref{lem:prob} (see \appref{sect:app_acl}).
 
+\subsection{Changing the selection rule}
+As seen in the previous section, \acl selects at each iteration
+the point $\*x_t$ with the largest uncertainty,
+quantified by the range $w_t(\*x_t)$ of its confidence region
+(line~21 of \algoref{alg:acl}).
+An intuitive alternative would be to choose the ``most ambiguous" point with
+respect to its classification into $H_t$ or $L_t$. A way to express this
+notion of ambiguity is via the following quantity
+\begin{align*}
+s_t(\*x) = \min\{\max(C_t(\*x)) - h, h - \min(C_t(\*x))\}.
+\end{align*}
+From the classification rules of \acl, it follows that
+\begin{align*}
+\epsilon < s_t(\*x) \leq w_t(\*x)/2,\ \forall \*x \in U_t,
+\end{align*}
+where values close to $w_t(\*x)/2$ imply that the confidence region of $\*x$
+extends almost equally above and below the contour level $h$, which indicates
+a point of high ambiguity (see \figref{fig:amb}).
+
+Following the above intuition, we may use the following alternative
+ambiguity-based selection rule
+\begin{align}
+\label{eq:amb}
+\*x_t = \argmax_{\*x\in U_t}(s_t(\*x))
+\end{align}
+at each iteration of \acl. It turns out that the guarantees obtained by
+\theoremref{thm:acl} for the uncertainty-based selection rule, also hold
+for the new rule, as expressed in the following theorem.
+
+\begin{theorem}
+\label{thm:amb}
+If the selection rule in line~21 of \algoref{alg:acl} is replaced by the
+ambiguity-based rule of \eqtref{eq:amb}, \theoremref{thm:acl} holds without
+any change.
+\end{theorem}
+
 %%%--------------------------------------------------------------------------%%%
 %%% Batch
 %%%--------------------------------------------------------------------------%%%
@@ -292,7 +327,7 @@ $\fb[t] \leq t-1$ for all $t \geq 1$. This means that when selecting
 the next measurement at iteration $t$, we have access to evaluated
 measurements up to timestep $fb[t]$.
 
-\subsection{The \bacl Algorithm}
+\subsection{The \bacl algorithm}
 As in the sequential case, the selection of measurements is guided by
 defining confidence regions using the predicted mean and variance of
 the GP model. Because the predicted variance does not depend on the
@@ -333,7 +368,6 @@ w_t^b(\*x) = \max(C_t^b(\*x)) - \min(C_t^b(\*x)).
     \LET{$U_t$}{$U_{t-1}$}
     \FORALL{$\*x \in U_{t-1}$}
       \LET{$C_{t}^{b}(\*x)$}{$C_{t-1}^{b}(\*x) \cap Q_t^{b}(\*x)$}
-      \LET{$w_{t}^{b}(\*x)$}{$\max(C_{t}^{b}(\*x)) - \min(C_{t}^{b}(\*x))$}
       \IF{$\min(C_t^{b}(\*x)) + \epsilon \geq h$}
         \LET{$U_t$}{$U_t \setminus \{\*x\}$}
         \LET{$H_t$}{$H_t \cup \{\*x\}$}
@@ -369,7 +403,7 @@ means are updated (line~27), and the feedback pointer $t_{fb}$
 is updated (line~28). Note that the predicted variances are updated at
 each iteration (line~30), even if there is no new feedback available.
 
-\subsection{Theoretical Analysis of \bacl}
+\subsection{Theoretical analysis of \bacl}
 Compared to the analysis of \acl, the main addition required in the case of
 \bacl is to ensure that the new confidence regions $Q_t^b(\*x)$ still
 contain $f(\*x)$ with high probability. To that end, a bound on the
@@ -486,6 +520,7 @@ See Lemma 5.3 in \cite{srinivas2010}.
 \end{proof}
 
 \begin{lemma}
+\label{lem:wbound}
 When running \acl with $\beta_t$ as in \lemmaref{lem:srin1}, it holds that
 \begin{align*}
 w_t(\*x_t) \leq \sqrt{\frac{C_1 \beta_t \gamma_t}{t}},\ \forall t \geq 1,
@@ -514,7 +549,7 @@ C_1\beta_t\gamma_t &\geq C_1\beta_t I(\*y_t; \*f_t)\\
 \end{proof}
 
 \begin{lemma}
-When running \acl, if for some $t \geq 1$ $w_t(\*x_t) \leq 2\epsilon$,
+When running \acl, if for some $t \geq 1$, $w_t(\*x_t) \leq 2\epsilon$,
 then $U_{t+1} = \varnothing$.
 \end{lemma}
 \begin{proof}
@@ -559,6 +594,83 @@ conditions in lines~13 and 16 of \algoref{alg:acl}.
 
 \theoremref{thm:acl} follows immediately from \corref{cor:iter}
 and \lemmaref{lem:prob}.
+
+%%%--------------------------------------------------------------------------%%%
+%%% Appendix ambiguity
+%%%--------------------------------------------------------------------------%%%
+\section{Proof of \theoremref{thm:amb}} \label{sect:app_amb}
+\begin{lemma}
+\label{lem:sb}
+The following holds for any $t \geq 1$
+\begin{align*}
+s_t(\*x_t) \leq \beta_t^{1/2}\sigma_{t-1}(\*x_t)
+\end{align*}
+\end{lemma}
+\begin{proof}
+By definition of $s_t(\*x)$ and \lemmaref{lem:wb}
+\begin{align*}
+s_t(\*x_t) &= \min\{\max(C_t(\*x_t))-h, h-\min(C_t(\*x_t))\}\\
+&\leq w_t(\*x_t)/2\\
+&\leq \beta_t^{1/2}\sigma_{t-1}(\*x_t)
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+When running \acl with the ambiguity-based selection rule,
+$s_t(\*x_t)$ is nonincreasing in $t$.
+\end{lemma}
+\begin{proof}
+Completely analogous to the proof of \lemmaref{lem:dec}.
+\end{proof}
+
+\begin{lemma}
+\label{lem:sbound}
+When running \acl with the ambiguity-based selection rule and
+$\beta_t$ as in \lemmaref{lem:srin1}, it holds that
+\begin{align*}
+s_t(\*x_t) \leq \sqrt{\frac{C_1 \beta_t \gamma_t}{4t}},\ \forall t \geq 1,
+\end{align*}
+where $C_1 = 8 / \log(1 + \sigma^{-2})$.
+\end{lemma}
+\begin{proof}
+Completely analogous to the proof of \lemmaref{lem:wbound}, with
+the only difference being a missing factor of 2 in the bound
+of \lemmaref{lem:sb} compared to \lemmaref{lem:wb}, which results
+in the factor of 4 in the demoninator of this lemma.
+\end{proof}
+
+\begin{lemma}
+\label{lem:sterm}
+When running \acl with the ambiguity-based selection rule,
+if for some $t \geq 1$, $s_t(\*x_t) \leq \epsilon$,
+then $U_{t+1} = \varnothing$.
+\end{lemma}
+\begin{proof}
+Assume that $U_{t+1} \neq \varnothing$, i.e. there exists a point
+$\*x \in U_t$, which does not meet the classification conditions in
+lines~13 and 16 of \algoref{alg:acl}. Consequently, that point
+satisfies $\max(C_{t+1}(\*x)) > h + \epsilon$ and
+$\min(C_{t+1}(\*x)) < h - \epsilon$. It follows that
+\begin{align*}
+\epsilon &< \min\{\max(C_{t+1}(\*x_t))-h, h-\min(C_{t+1}(\*x_t))\}\\
+&= s_{t+1}(\*x) \leq s_t(\*x) \leq s_t(\*x_t),
+\end{align*}
+which contradicts the assumption.
+\end{proof}
+
+\begin{cor}
+\label{cor:siter}
+The \acl algorithm with the ambiguity-based selection rule terminates
+after at most $T$ iterations, where $T$
+is the smallest positive integer satisfying
+\begin{align*}
+\frac{T}{\beta_T \gamma_T} \geq \frac{C_1}{4\epsilon^2}
+\end{align*}
+\end{cor}
+
+Note that \corref{cor:siter} is identical to \corref{cor:iter} and
+\lemmaref{lem:prob} holds without change for the ambiguity-based selection
+rule. Therefore, \theoremref{thm:amb} follows immediately.
 
 %%%--------------------------------------------------------------------------%%%
 %%% Appendix batch
