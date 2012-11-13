@@ -23,6 +23,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{amsthm}
+\usepackage{xspace}          % Controls space after user-defined command
+\usepackage{fixltx2e}        % For subscripts in normal text
 %
 
 % As of 2011, we use the hyperref package to produce hyperlinks in the
@@ -57,11 +59,11 @@
 \newcommand{\sectref}[1]{\hyperref[#1]{\mbox{Section~\ref*{#1}}}}
 \newcommand{\figref}[1]{\hyperref[#1]{\mbox{Figure~\ref*{#1}}}}
 \newcommand{\tabref}[1]{\hyperref[#1]{\mbox{Table~\ref*{#1}}}}
-\newcommand{\eqtref}[1]{\hyperref[#1]{\mbox{Equation~\ref*{#1}}}}
 \newcommand{\algoref}[1]{\hyperref[#1]{\mbox{Algorithm~\ref*{#1}}}}
 \newcommand{\theoremref}[1]{\hyperref[#1]{\mbox{Theorem~\ref*{#1}}}}
 \newcommand{\lemmaref}[1]{\hyperref[#1]{\mbox{Lemma~\ref*{#1}}}}
 \newcommand{\corref}[1]{\hyperref[#1]{\mbox{Corollary~\ref*{#1}}}}
+\newcommand{\eqtref}[1]{\hyperref[#1]{\mbox{(\ref*{#1})}}}
 
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
@@ -82,6 +84,9 @@
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\acl}{\textsf{ACL}\xspace}
+\newcommand{\bacl}{\textsf{ACL\textsubscript{batch}}\xspace}
 %
 
 % The \icmltitle you define below is probably too long as a header.
@@ -103,7 +108,7 @@
 % You may provide any keywords that you 
 % find helpful for describing your paper; these are used to populate 
 % the "keywords" metadata in the PDF but will not be shown in the document
-\icmlkeywords{boring formatting information, machine learning, ICML}
+\icmlkeywords{}
 
 \vskip 0.3in
 ]
@@ -119,7 +124,7 @@ $H, L \subseteq D$, such that
 $H = \{\*x \in D \mid f(\*x) > h\}$ and $L = \{\*x \in D \mid f(\*x) \leq h\}$.
 
 \section{Algorithm}
-The ACL algorithm is based on iteratively training a GP model on the
+The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
 model to guide the selection of the next point to be evaluated.
 
@@ -132,8 +137,7 @@ Using the predictions $\mu_t(\*x)$ and $\sigma_t(\*x)$, a confidence
 interval $Q_t(\*x)$ that captures the uncertainty about $f(\*x)$ is constructed
 for a point $\*x$ as follows
 \begin{align*}
-Q_t(\*x) = [&\mu_{t-1}(\*x) - \beta_t^{1/2}\sigma_{t-1}(\*x),\\
-            &\mu_{t-1}(\*x) + \beta_t^{1/2}\sigma_{t-1}(\*x)],
+Q_t(\*x) = \left[\mu_{t-1}(\*x) \pm \beta_t^{1/2}\sigma_{t-1}(\*x)\right]
 \end{align*}
 where the scaling parameter $\beta_t$ will be chosen later.
 In order to obtain a monotonically decreasing confidence region $C_t(\*x)$,
@@ -149,7 +153,7 @@ w_t(\*x) = \max(C_t(\*x)) - \min(C_t(\*x))
 is used to classify points into $H_t$ and $L_t$, as well as to choose
 the next point to be evaluated.
 
-\algoref{alg:acl} presents the operation of ACL in pseudocode. The problem
+\algoref{alg:acl} presents the operation of \acl in pseudocode. The problem
 of classifying points into $H$ and $L$ is relaxed by introducing an
 accuracy parameter $\epsilon \geq 0$, which will be shown later to trade off
 number of iterations for accuracy. The parameter is given as
@@ -189,7 +193,7 @@ completed and all points are classified, the estimated sets $\hat{H}$ and
 $\hat{L}$ are returned  (lines~26--27).
 
 \begin{algorithm}[tb]
-  \caption{The ACL algorithm}
+  \caption{The \acl algorithm}
   \label{alg:acl}
 \begin{algorithmic}[1]
   \REQUIRE input space $D$, GP prior ($\mu_0$, $\sigma_0$, $k$),\\
@@ -226,7 +230,7 @@ $\hat{L}$ are returned  (lines~26--27).
 \end{algorithm}
 
 \section{Theoretical Analysis}
-The convergence analysis of ACL is based on the regularity of the GP kernel
+The convergence analysis of \acl is based on the regularity of the GP kernel
 quantified by the maximum information gain of $t$ sampled points
 \begin{align*}
 \gamma_t = \max_{\*y_t}I(\*y_t; \*f_t),
@@ -234,25 +238,27 @@ quantified by the maximum information gain of $t$ sampled points
 where $\*y_t = (y_i)_{1\leq i\leq t}$ and
 $\*f_t = (f(\*x_i))_{1\leq i\leq t}$.
 
-The quality of a solution $(\hat{H}, \hat{L})$ returned by ACL with
+The quality of a solution $(\hat{H}, \hat{L})$ returned by \acl with
 respect to the classification of a single point $\*x \in D$ can be
 judged by the misclassification error
 \begin{align*}
 \ell(\*x) = \twopartdef{\max\{0, f(\*x) - h\}}{\*x\in \hat{L}}{\max\{0, h - f(\*x)\}}{\*x\in \hat{H}}
 \end{align*}
-The following theorem establishes bounds on the number of ACL iterations
+The following theorem establishes bounds on the number of \acl iterations
 required to achieve a certain classification quality in terms of the
 maximum misclassification error.
 
 \begin{theorem}
 \label{thm:acl}
 For any $\delta \in (0, 1)$ and $\epsilon \geq 0$,
-if $\beta_t = 2\log(|D|\pi^2 t^2/(6\delta))$, then ACL terminates after
+if $\beta_t = 2\log(|D|\pi^2 t^2/(6\delta))$, then \acl terminates after
 at most $T$ iterations, where $T$ is the smallest positive integer
 satisfying
 \begin{align*}
-\frac{T}{\beta_T \gamma_T} \geq \frac{C_1}{4\epsilon^2}
+\frac{T}{\beta_T \gamma_T} \geq \frac{C_1}{4\epsilon^2},
 \end{align*}
+where $C_1 = 8/log(1 + \sigma^{-2})$.
+
 Furthermore, with probability at least $1-\delta$, no point is
 misclassified by more than $\epsilon$, that is
 \begin{align*}
@@ -260,7 +266,41 @@ misclassified by more than $\epsilon$, that is
 \end{align*}
 \end{theorem}
 
-\theoremref{thm:acl} is proven using Lemmas 1--7 below.
+\theoremref{thm:acl} is proven using
+Lemmas~\ref{lem:srin1}--\ref{lem:prob} (see Appendix).
+
+\begin{theorem}
+\label{thm:bacl}
+Assume that for all $t \geq 1$ the maximum conditional mutual information
+acquired by any set of measurements since the last feedback is bounded
+by a constant $C \geq 0$, i.e.
+\begin{align*}
+\max_{A\subseteq D, |A|\leq B-1} I(f; \*y_A \mid \*y_{1:fb[t]}) \leq C
+\end{align*}
+Then, for any $\delta \in (0, 1)$ and $\epsilon \geq 0$,
+if $\eta_t = e^C\beta_{fb[t]+1}$, \bacl terminates after
+at most $T$ iterations, where $T$ is the smallest positive integer
+satisfying
+\begin{align*}
+\frac{T}{\eta_T \gamma_T} \geq \frac{C_1}{4\epsilon^2},
+\end{align*}
+where $C_1 = 8/log(1 + \sigma^{-2})$.
+
+Furthermore, with probability at least $1-\delta$, no point is
+misclassified by more than $\epsilon$, that is
+\begin{align*}
+\Pr\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\} \geq 1 - \delta.
+\end{align*}
+\end{theorem}
+
+\theoremref{thm:bacl} is proven using
+Lemmas~\ref{lem:cmi}--\ref{lem:batch}  (see Appendix)..
+
+\bibliography{acl}
+\bibliographystyle{icml2013}
+
+\appendix
+\section{Proof of \theoremref{thm:acl}}
 
 \begin{lemma}
 \label{lem:srin1}
@@ -305,7 +345,7 @@ w_t(\*x_t) &= \max(C_t(\*x_t)) - \min(C_t(\*x_t))\\
 
 \begin{lemma}
 \label{lem:dec}
-When running ACL, $w_t(\*x_t)$ is nonincreasing in $t$.
+When running \acl, $w_t(\*x_t)$ is nonincreasing in $t$.
 \end{lemma}
 \begin{proof}
 From the definition of the confidence regions
@@ -331,7 +371,7 @@ See Lemma 5.3 in \cite{srinivas2010}.
 \end{proof}
 
 \begin{lemma}
-When running ACL with $\beta_t$ as in \lemmaref{lem:srin1}, it holds that
+When running \acl with $\beta_t$ as in \lemmaref{lem:srin1}, it holds that
 \begin{align*}
 w_t(\*x_t) \leq \sqrt{\frac{C_1 \beta_t \gamma_t}{t}},\ \forall t \geq 1,
 \end{align*}
@@ -359,7 +399,7 @@ C_1\beta_t\gamma_t &\geq C_1\beta_t I(\*y_t; \*f_t)\\
 \end{proof}
 
 \begin{lemma}
-When running ACL, if for some $t \geq 1$ $w_t(\*x_t) \leq 2\epsilon$,
+When running \acl, if for some $t \geq 1$ $w_t(\*x_t) \leq 2\epsilon$,
 then $U_{t+1} = \varnothing$.
 \end{lemma}
 \begin{proof}
@@ -380,7 +420,7 @@ proves the lemma.
 
 \begin{cor}
 \label{cor:iter}
-The ACL algorithm terminates after at most $T$ iterations, where $T$
+The \acl algorithm terminates after at most $T$ iterations, where $T$
 is the smallest positive integer satisfying
 \begin{align*}
 \frac{T}{\beta_T \gamma_T} \geq \frac{C_1}{4\epsilon^2}
@@ -389,7 +429,7 @@ is the smallest positive integer satisfying
 
 \begin{lemma}
 \label{lem:prob}
-For any $\delta \in (0, 1)$, after running ACL with any $\epsilon \geq 0$
+For any $\delta \in (0, 1)$, after running \acl with any $\epsilon \geq 0$
 and with $\beta_t$ as in \lemmaref{lem:srin1}, with probability at least
 $1-\delta$ no point $\*x \in D$ will have been missclassified by more
 than $\epsilon$, that is
@@ -405,12 +445,73 @@ conditions in lines~13 and 16 of \algoref{alg:acl}.
 \theoremref{thm:acl} follows immediately from \corref{cor:iter}
 and \lemmaref{lem:prob}.
 
-% In the unusual situation where you want a paper to appear in the
-% references without citing it in the main text, use \nocite
-%\nocite{langley00}
+\section{Proof of \theoremref{thm:bacl}}
+\begin{lemma}
+\label{lem:cmi}
+For any $\*x \in D$ and $t \geq 1$
+the ratio of $\sigma_{fb[t]}(\*x)$ to $\sigma_{t-1}(\*x)$ is bounded
+as follows
+\begin{align*}
+\frac{\sigma_{fb[t]}(\*x)}{\sigma_{t-1}(\*x)} \leq \exp\left\{I(f; \*y_{fb[t]+1:t-1} \mid \*y_{1:fb[t]}\right\}
+\end{align*}
+\end{lemma}
+\begin{proof}
+See Lemma 1 in \cite{desautels2012}.
+\end{proof}
 
-\bibliography{acl}
-\bibliographystyle{icml2013}
+\begin{lemma}
+\label{lem:batch}
+Assume that for all $t \geq 1$ the maximum conditional mutual information
+acquired by any set of measurements since the last feedback is bounded
+by a constant $C \geq 0$, i.e.
+\begin{align}
+\label{eq:cmi}
+\max_{A\subseteq D, |A|\leq B-1} I(f; \*y_A \mid \*y_{1:fb[t]}) \leq C
+\end{align}
+Then, if $\eta_t = e^{2C}\beta_{fb[t]+1}$, the following holds with probability
+at least $1 - \delta$
+\begin{align*}
+f(\*x) \in Q_t^{batch}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+\end{align*}
+\end{lemma}
+\begin{proof}
+From \lemmaref{lem:cmi} and \eqtref{eq:cmi}, it follows that for any
+$\*x \in D$ and $t \geq 1$
+\begin{align*}
+&\frac{\sigma_{fb[t]}(\*x)}{\sigma_{t-1}(\*x)} \leq \exp\left\{I(f; \*y_{fb[t]+1:t-1} \mid \*y_{1:fb[t]}\right\} \leq e^C\\
+\Rightarrow\ & e^C \sigma_{t-1}(\*x) \geq \sigma_{fb[t]}(\*x)
+\end{align*}
+Using this, the range of $Q_t^{batch}(\*x)$ can be related to the range
+of $Q_{fb[t]+1}(\*x)$ as follows
+\begin{align*}
+2\eta_t^{1/2}\sigma_{t-1}(\*x) = 2 e^C \beta_{fb[t]+1}^{1/2}\sigma_{t-1}(\*x) \geq 2\beta_{fb[t]+1}^{1/2}\sigma_{fb[t]}(\*x)
+\end{align*}
+Furthermore, $Q_t^{batch}(\*x)$ and $Q_{fb[t]+1}(\*x)$ have the same midpoint,
+namely $\mu_{fb[t]}(\*x)$, therefore the above range inequality implies that
+\begin{align}
+\label{eq:qbss}
+Q_t^{batch}(\*x) \supseteq Q_{fb[t]+1}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+\end{align}
+Finally, from \lemmaref{lem:srin1} we have that
+\begin{align*}
+&\Pr\{f(\*x) \in Q_{fb[t]+1}(\*x)\} \geq 1 - \delta,\ \forall \*x \in D\ \forall t \geq 1\\
+\stackrel{\eqref{eq:qbss}}{\Rightarrow}\ & \Pr\{f(\*x) \in Q_t^{batch}(\*x)\} \geq 1 - \delta,\ \forall \*x \in D\ \forall t \geq 1
+\end{align*}
+\end{proof}
+
+\begin{cor}
+\label{cor:batch}
+Given the assumptions of \lemmaref{lem:batch}, the following holds with
+probability at least $1-\delta$
+\begin{align*}
+f(\*x) \in C_t^{batch}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+\end{align*}
+\end{cor}
+
+Note that \corref{cor:batch} is completely analogous to \corref{cor:cs}.
+Thus, the results of Lemmas~\ref{lem:wb}--\ref{lem:prob} also hold for
+the case of \bacl, provided that $\eta_t$, as defined in \lemmaref{lem:batch},
+is used in place of $\beta_t$, which proves \theoremref{thm:bacl}.
 
 \end{document} 
 
