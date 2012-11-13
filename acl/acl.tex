@@ -87,6 +87,7 @@
 
 \newcommand{\acl}{\textsf{ACL}\xspace}
 \newcommand{\bacl}{\textsf{ACL\textsubscript{batch}}\xspace}
+\newcommand{\fb}{\mathop{\mathrm{fb}}}
 %
 
 % The \icmltitle you define below is probably too long as a header.
@@ -123,11 +124,12 @@ value $h\in \mathbb{R}$. More formally, we want to determine two sets
 $H, L \subseteq D$, such that
 $H = \{\*x \in D \mid f(\*x) > h\}$ and $L = \{\*x \in D \mid f(\*x) \leq h\}$.
 
-\section{Algorithm}
+\section{Sequential measurements}
 The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
 model to guide the selection of the next point to be evaluated.
 
+\subsection{Algorithm}
 At each iteration $t \geq 1$ the algorithm maintains a set $U_t$ of yet
 unclassified points, a set $H_t$ of points classified as lying above
 the threshold, and a set $L_t$ of points classified as lying below the
@@ -137,7 +139,7 @@ Using the predictions $\mu_t(\*x)$ and $\sigma_t(\*x)$, a confidence
 interval $Q_t(\*x)$ that captures the uncertainty about $f(\*x)$ is constructed
 for a point $\*x$ as follows
 \begin{align*}
-Q_t(\*x) = \left[\mu_{t-1}(\*x) \pm \beta_t^{1/2}\sigma_{t-1}(\*x)\right]
+Q_t(\*x) = \left[\mu_{t-1}(\*x) \pm \beta_t^{1/2}\sigma_{t-1}(\*x)\right],
 \end{align*}
 where the scaling parameter $\beta_t$ will be chosen later.
 In order to obtain a monotonically decreasing confidence region $C_t(\*x)$,
@@ -221,7 +223,7 @@ $\hat{L}$ are returned  (lines~26--27).
     \ENDFOR
     \LET{$\*x_t$}{$\argmax_{\*x \in U_t}(w_t(\*x))$}
     \LET{$y_t$}{$f(\*x_t) + \nu_t$}
-    \STATE Compute $\mu_t(\*x)$ and $\sigma_t(\*x)$, for all $\*x \in U_t$
+    \STATE Compute $\mu_t(\*x)$ and $\sigma_t(\*x)$ for all $\*x \in U_t$
     \LET{$t$}{$t + 1$}
   \ENDWHILE
   \LET{$\hat{H}$}{$H_{t-1}$}
@@ -229,7 +231,7 @@ $\hat{L}$ are returned  (lines~26--27).
 \end{algorithmic}
 \end{algorithm}
 
-\section{Theoretical Analysis}
+\subsection{Theoretical Analysis}
 The convergence analysis of \acl is based on the regularity of the GP kernel
 quantified by the maximum information gain of $t$ sampled points
 \begin{align*}
@@ -262,12 +264,112 @@ where $C_1 = 8/log(1 + \sigma^{-2})$.
 Furthermore, with probability at least $1-\delta$, no point is
 misclassified by more than $\epsilon$, that is
 \begin{align*}
-\Pr\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\} \geq 1 - \delta.
+\Pr\left\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\right\} \geq 1 - \delta.
 \end{align*}
 \end{theorem}
 
 \theoremref{thm:acl} is proven using
 Lemmas~\ref{lem:srin1}--\ref{lem:prob} (see Appendix).
+
+\section{Batch measurements}
+The batch setting is differentiated from the sequential one seen in the
+previous section by the
+fact that measurements are not evaluated one by one, but rather several
+measurements are performed in parallel and feedback is received after
+some delay. In general, the available measurements at each iteration
+are determined by a function
+$\fb : \mathbb{N} \to \mathbb{N}\cup\{0\}$, such that
+$\fb[t] \leq t-1$ for all $t \geq 1$. This means that when selecting
+the next measurement at iteration $t$, we have access to evaluated
+measurements up to timestep $fb[t]$.
+
+\subsection{Algorithm}
+As in the sequential case, the selection of measurements is guided by
+defining confidence regions using the predicted mean and variance of
+the GP model. Because the predicted variance does not depend on the
+observed values, we can use in place of $Q_t(\*x)$ the following
+confidence interval
+\begin{align*}
+Q_t^b(\*x) = \left[\mu_{\fb[t]}(\*x) \pm \eta_t^{1/2}\sigma_{t-1}(\*x)\right],
+\end{align*}
+where, again, the scaling parameter $\eta_t$ has to be chosen appropriately.
+
+As before, we intersect successive intervals to obtain the following
+monotonically decreasing confidence regions
+\begin{align*}
+C_t^b(\*x) = C_{t-1}^b(\*x) \cap Q_t^b(\*x)
+\end{align*}
+with $C_0^b(\*x) = \mathbb{R}$ and range
+\begin{align*}
+w_t^b(\*x) = \max(C_t^b(\*x)) - \min(C_t^b(\*x)).
+\end{align*}
+
+\begin{algorithm}[!t]
+  \caption{The \bacl algorithm}
+  \label{alg:bacl}
+\begin{algorithmic}[1]
+  \REQUIRE input space $D$, GP prior ($\mu_0$, $\sigma_0$, $k$),\\
+           \hspace{1.9em}threshold value $h$, accuracy parameter $\epsilon$,\\
+           \hspace{1.9em}feedback function $\fb$
+  \ENSURE predicted sets $\hat{H}$, $\hat{L}$
+  \LET{$H_0$}{$\varnothing$}
+  \LET{$L_0$}{$\varnothing$}
+  \LET{$U_0$}{$D$}
+  \LET{$C_0^b(\*x)$}{$\mathbb{R}$, for all $\*x \in D$}
+  \LET{$t_{fb}$}{0}
+  \LET{$t$}{1}
+  \WHILE{$U_{t-1} \neq \varnothing$}
+    \LET{$H_t$}{$H_{t-1}$}
+    \LET{$L_t$}{$L_{t-1}$}
+    \LET{$U_t$}{$U_{t-1}$}
+    \FORALL{$\*x \in U_{t-1}$}
+      \LET{$C_{t}^{b}(\*x)$}{$C_{t-1}^{b}(\*x) \cap Q_t^{b}(\*x)$}
+      \LET{$w_{t}^{b}(\*x)$}{$\max(C_{t}^{b}(\*x)) - \min(C_{t}^{b}(\*x))$}
+      \IF{$\min(C_t^{b}(\*x)) + \epsilon \geq h$}
+        \LET{$U_t$}{$U_t \setminus \{\*x\}$}
+        \LET{$H_t$}{$H_t \cup \{\*x\}$}
+      \ELSIF{$\max(C_t^{b}(\*x)) - \epsilon \leq h$}
+        \LET{$U_t$}{$U_t \setminus \{\*x\}$}
+        \LET{$L_t$}{$L_t \cup \{\*x\}$}
+      \ENDIF
+    \ENDFOR
+    \LET{$\*x_t$}{$\argmax_{\*x \in U_t}(w_t^{b}(\*x))$}
+    \IF{$\fb[t+1] > t_{fb}$}
+      \FOR{$i = t_{fb}+1,\ldots,t$}
+        \LET{$y_i$}{$f(\*x_i) + \nu_i$}
+      \ENDFOR
+      \STATE Compute $\mu_t(\*x)$ for all $\*x \in U_t$
+      \LET{$t_{fb}$}{$t$}
+    \ENDIF
+    \STATE Compute $\sigma_t(\*x)$ for all $\*x \in U_t$
+    \LET{$t$}{$t + 1$}
+  \ENDWHILE
+  \LET{$\hat{H}$}{$H_{t-1}$}
+  \LET{$\hat{L}$}{$L_{t-1}$}
+\end{algorithmic}
+\end{algorithm}
+
+\algoref{alg:bacl} shows the pseudocode of the \bacl algorithm. The main
+difference from the sequential version can be seen in lines~23--30.
+In particular, after selecting the point of measurement at iteration $t$
+in a similar fashion to the sequential version (line~22), the algorithm
+checks whether there is some new feedback available (line~23). If that
+is the case, measurements from the latest obtained feedback point ($t_{fb}$)
+up to the current iteration are obtained (lines~24--26), the predicted
+means are updated (line~27), and the feedback pointer $t_{fb}$
+is updated (line~28). Note that the predicted variances are updated at
+each iteration (line~30), even if there is no new feedback available.
+
+\subsection{Theoretical Analysis}
+Compared to the analysis of \acl, the main addition required in the case of
+\bacl is to ensure that the new confidence regions $Q_t^b(\*x)$ still
+contain $f(\*x)$ with high probability. To that end, a bound on the
+conditional mutual information between $f$ and the measurements
+obtained during the batch selection, given the already available feedback,
+is obtained and used to adjust $\eta_t$.
+
+The following theorem is the analog to \theoremref{thm:acl} for the
+\bacl algorithm.
 
 \begin{theorem}
 \label{thm:bacl}
@@ -289,12 +391,12 @@ where $C_1 = 8/log(1 + \sigma^{-2})$.
 Furthermore, with probability at least $1-\delta$, no point is
 misclassified by more than $\epsilon$, that is
 \begin{align*}
-\Pr\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\} \geq 1 - \delta.
+\Pr\left\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\right\} \geq 1 - \delta.
 \end{align*}
 \end{theorem}
 
 \theoremref{thm:bacl} is proven using
-Lemmas~\ref{lem:cmi}--\ref{lem:batch}  (see Appendix)..
+Lemmas~\ref{lem:cmi}--\ref{lem:batch}  (see Appendix).
 
 \bibliography{acl}
 \bibliographystyle{icml2013}
@@ -434,7 +536,7 @@ and with $\beta_t$ as in \lemmaref{lem:srin1}, with probability at least
 $1-\delta$ no point $\*x \in D$ will have been missclassified by more
 than $\epsilon$, that is
 \begin{align*}
-\Pr\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\} \geq 1 - \delta
+\Pr\left\{\max_{\*x\in D}\ell(\*x) \leq \epsilon\right\} \geq 1 - \delta
 \end{align*}
 \end{lemma}
 \begin{proof}
@@ -471,7 +573,7 @@ by a constant $C \geq 0$, i.e.
 Then, if $\eta_t = e^{2C}\beta_{fb[t]+1}$, the following holds with probability
 at least $1 - \delta$
 \begin{align*}
-f(\*x) \in Q_t^{batch}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+f(\*x) \in Q_t^{b}(\*x),\ \forall \*x \in D\ \forall t \geq 1
 \end{align*}
 \end{lemma}
 \begin{proof}
@@ -481,21 +583,21 @@ $\*x \in D$ and $t \geq 1$
 &\frac{\sigma_{fb[t]}(\*x)}{\sigma_{t-1}(\*x)} \leq \exp\left\{I(f; \*y_{fb[t]+1:t-1} \mid \*y_{1:fb[t]}\right\} \leq e^C\\
 \Rightarrow\ & e^C \sigma_{t-1}(\*x) \geq \sigma_{fb[t]}(\*x)
 \end{align*}
-Using this, the range of $Q_t^{batch}(\*x)$ can be related to the range
+Using this, the range of $Q_t^{b}(\*x)$ can be related to the range
 of $Q_{fb[t]+1}(\*x)$ as follows
 \begin{align*}
 2\eta_t^{1/2}\sigma_{t-1}(\*x) = 2 e^C \beta_{fb[t]+1}^{1/2}\sigma_{t-1}(\*x) \geq 2\beta_{fb[t]+1}^{1/2}\sigma_{fb[t]}(\*x)
 \end{align*}
-Furthermore, $Q_t^{batch}(\*x)$ and $Q_{fb[t]+1}(\*x)$ have the same midpoint,
+Furthermore, $Q_t^{b}(\*x)$ and $Q_{fb[t]+1}(\*x)$ have the same midpoint,
 namely $\mu_{fb[t]}(\*x)$, therefore the above range inequality implies that
 \begin{align}
 \label{eq:qbss}
-Q_t^{batch}(\*x) \supseteq Q_{fb[t]+1}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+Q_t^{b}(\*x) \supseteq Q_{fb[t]+1}(\*x),\ \forall \*x \in D\ \forall t \geq 1
 \end{align}
 Finally, from \lemmaref{lem:srin1} we have that
 \begin{align*}
 &\Pr\{f(\*x) \in Q_{fb[t]+1}(\*x)\} \geq 1 - \delta,\ \forall \*x \in D\ \forall t \geq 1\\
-\stackrel{\eqref{eq:qbss}}{\Rightarrow}\ & \Pr\{f(\*x) \in Q_t^{batch}(\*x)\} \geq 1 - \delta,\ \forall \*x \in D\ \forall t \geq 1
+\stackrel{\eqref{eq:qbss}}{\Rightarrow}\ & \Pr\{f(\*x) \in Q_t^{b}(\*x)\} \geq 1 - \delta,\ \forall \*x \in D\ \forall t \geq 1
 \end{align*}
 \end{proof}
 
@@ -504,7 +606,7 @@ Finally, from \lemmaref{lem:srin1} we have that
 Given the assumptions of \lemmaref{lem:batch}, the following holds with
 probability at least $1-\delta$
 \begin{align*}
-f(\*x) \in C_t^{batch}(\*x),\ \forall \*x \in D\ \forall t \geq 1
+f(\*x) \in C_t^{b}(\*x),\ \forall \*x \in D\ \forall t \geq 1
 \end{align*}
 \end{cor}
 
