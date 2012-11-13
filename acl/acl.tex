@@ -129,7 +129,7 @@ The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
 model to guide the selection of the next point to be evaluated.
 
-\subsection{Algorithm}
+\subsection{The \acl Algorithm}
 At each iteration $t \geq 1$ the algorithm maintains a set $U_t$ of yet
 unclassified points, a set $H_t$ of points classified as lying above
 the threshold, and a set $L_t$ of points classified as lying below the
@@ -231,7 +231,7 @@ $\hat{L}$ are returned  (lines~26--27).
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Theoretical Analysis}
+\subsection{Theoretical Analysis of \acl}
 The convergence analysis of \acl is based on the regularity of the GP kernel
 quantified by the maximum information gain of $t$ sampled points
 \begin{align*}
@@ -283,7 +283,7 @@ $\fb[t] \leq t-1$ for all $t \geq 1$. This means that when selecting
 the next measurement at iteration $t$, we have access to evaluated
 measurements up to timestep $fb[t]$.
 
-\subsection{Algorithm}
+\subsection{The \bacl Algorithm}
 As in the sequential case, the selection of measurements is guided by
 defining confidence regions using the predicted mean and variance of
 the GP model. Because the predicted variance does not depend on the
@@ -360,7 +360,7 @@ means are updated (line~27), and the feedback pointer $t_{fb}$
 is updated (line~28). Note that the predicted variances are updated at
 each iteration (line~30), even if there is no new feedback available.
 
-\subsection{Theoretical Analysis}
+\subsection{Theoretical Analysis of \bacl}
 Compared to the analysis of \acl, the main addition required in the case of
 \bacl is to ensure that the new confidence regions $Q_t^b(\*x)$ still
 contain $f(\*x)$ with high probability. To that end, a bound on the
