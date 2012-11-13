@@ -64,6 +64,7 @@
 \newcommand{\lemmaref}[1]{\hyperref[#1]{\mbox{Lemma~\ref*{#1}}}}
 \newcommand{\corref}[1]{\hyperref[#1]{\mbox{Corollary~\ref*{#1}}}}
 \newcommand{\eqtref}[1]{\hyperref[#1]{\mbox{(\ref*{#1})}}}
+\newcommand{\appref}[1]{\hyperref[#1]{\mbox{Appendix~\ref*{#1}}}}
 
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
@@ -124,6 +125,9 @@ value $h\in \mathbb{R}$. More formally, we want to determine two sets
 $H, L \subseteq D$, such that
 $H = \{\*x \in D \mid f(\*x) > h\}$ and $L = \{\*x \in D \mid f(\*x) \leq h\}$.
 
+%%%--------------------------------------------------------------------------%%%
+%%% Sequential
+%%%--------------------------------------------------------------------------%%%
 \section{Sequential measurements}
 The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
@@ -269,8 +273,11 @@ misclassified by more than $\epsilon$, that is
 \end{theorem}
 
 \theoremref{thm:acl} is proven using
-Lemmas~\ref{lem:srin1}--\ref{lem:prob} (see Appendix).
+Lemmas~\ref{lem:srin1}--\ref{lem:prob} (see \appref{sect:app_acl}).
 
+%%%--------------------------------------------------------------------------%%%
+%%% Batch
+%%%--------------------------------------------------------------------------%%%
 \section{Batch measurements}
 The batch setting is differentiated from the sequential one seen in the
 previous section by the
@@ -396,13 +403,17 @@ misclassified by more than $\epsilon$, that is
 \end{theorem}
 
 \theoremref{thm:bacl} is proven using
-Lemmas~\ref{lem:cmi}--\ref{lem:batch}  (see Appendix).
+Lemmas~\ref{lem:cmi}--\ref{lem:batch}  (see \appref{sect:app_bacl}).
 
 \bibliography{acl}
 \bibliographystyle{icml2013}
 
+
 \appendix
-\section{Proof of \theoremref{thm:acl}}
+%%%--------------------------------------------------------------------------%%%
+%%% Appendix sequential
+%%%--------------------------------------------------------------------------%%%
+\section{Proof of \theoremref{thm:acl}} \label{sect:app_acl}
 
 \begin{lemma}
 \label{lem:srin1}
@@ -547,7 +558,10 @@ conditions in lines~13 and 16 of \algoref{alg:acl}.
 \theoremref{thm:acl} follows immediately from \corref{cor:iter}
 and \lemmaref{lem:prob}.
 
-\section{Proof of \theoremref{thm:bacl}}
+%%%--------------------------------------------------------------------------%%%
+%%% Appendix batch
+%%%--------------------------------------------------------------------------%%%
+\section{Proof of \theoremref{thm:bacl}} \label{sect:app_bacl}
 \begin{lemma}
 \label{lem:cmi}
 For any $\*x \in D$ and $t \geq 1$
