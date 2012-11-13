@@ -295,6 +295,18 @@ where values close to $w_t(\*x)/2$ imply that the confidence region of $\*x$
 extends almost equally above and below the contour level $h$, which indicates
 a point of high ambiguity (see \figref{fig:amb}).
 
+\begin{figure}[tb]
+\begin{center}
+\centerline{\includegraphics[width=0.9\columnwidth]{figures/amb}}
+\caption{Confidence regions ($C_t$) and ambiguities
+($s_t$) for two points $x$ and $x'$. Note that, although $\*x'$
+has a larger associated uncertainty ($w_t(\*x') > w_t(\*x)$),
+its ambiguity is smaller than that of $\*x$ ($s_t(\*x') < s_t(\*x)$).
+}
+\label{fig:amb}
+\end{center}
+\end{figure} 
+
 Following the above intuition, we may use the following alternative
 ambiguity-based selection rule
 \begin{align}
@@ -325,7 +337,7 @@ are determined by a function
 $\fb : \mathbb{N} \to \mathbb{N}\cup\{0\}$, such that
 $\fb[t] \leq t-1$ for all $t \geq 1$. This means that when selecting
 the next measurement at iteration $t$, we have access to evaluated
-measurements up to timestep $fb[t]$.
+measurements up to time step $fb[t]$.
 
 \subsection{The \bacl algorithm}
 As in the sequential case, the selection of measurements is guided by
@@ -411,7 +423,7 @@ conditional mutual information between $f$ and the measurements
 obtained during the batch selection, given the already available feedback,
 is obtained and used to adjust $\eta_t$.
 
-The following theorem is the analog to \theoremref{thm:acl} for the
+The following theorem is the analog of \theoremref{thm:acl} for the
 \bacl algorithm.
 
 \begin{theorem}
