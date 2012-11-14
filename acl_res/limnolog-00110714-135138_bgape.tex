@@ -1,0 +1,136 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+
+% defining custom colors
+\definecolor{mycolor1}{rgb}{0,0.75,0.75}
+\definecolor{mycolor2}{rgb}{0.75,0,0.75}
+
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0, xmax=350,
+xlabel={Samples},
+ymin=0, ymax=90,
+ylabel={Misclassification error},
+axis lines*=left,
+legend style={fill=none,draw=none,align=left}]
+\addplot [
+color=blue,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (271,11.6)(206,15.7)(157,18.9)(102,27.8)(70,39.3)(49,35.1)(38,44.4)(28,50.4)(27,63.4)(22,72.3) 
+};
+\addlegendentry{acl var};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=blue,draw=blue},
+forget plot
+]
+coordinates{
+ (271,11.6)(206,15.7)(157,18.9)(102,27.8)(70,39.3)(49,35.1)(38,44.4)(28,50.4)(27,63.4)(22,72.3) 
+};
+\addplot [
+color=green!50!black,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (245,10.3)(191,11.8)(130,19.8)(89,26)(64,34)(45,39.5)(34,42.7)(26,48.8)(23,60.2)(18,75.5) 
+};
+\addlegendentry{acl amb};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=green!50!black,draw=green!50!black},
+forget plot
+]
+coordinates{
+ (245,10.3)(191,11.8)(130,19.8)(89,26)(64,34)(45,39.5)(34,42.7)(26,48.8)(23,60.2)(18,75.5) 
+};
+\addplot [
+color=red,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (20,86.3454545454546)(40,75.5818181818182)(60,51)(80,40.9454545454546)(100,40.2545454545455)(120,39.8818181818182)(140,37.6090909090909)(160,36.8545454545455)(180,36.0636363636364)(200,34.8272727272727)(220,34.7545454545455)(240,33.4454545454545)(260,32.7727272727273)(280,31.7090909090909)(300,30.6818181818182) 
+};
+\addlegendentry{random};
+
+\addplot [
+color=red,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=red,draw=red},
+forget plot
+]
+plot [error bars/.cd, y dir = both, y explicit]
+coordinates{
+ (20,86.3454545454546)+-(0.0,48.3856665477776)(40,75.5818181818182)+-(0.0,50.4708196521875)(60,51)+-(0.0,20.0632998282935)(80,40.9454545454546)+-(0.0,14.353631152873)(100,40.2545454545455)+-(0.0,14.5151206427204)(120,39.8818181818182)+-(0.0,13.9537678196119)(140,37.6090909090909)+-(0.0,12.8739624471609)(160,36.8545454545455)+-(0.0,12.6245287940868)(180,36.0636363636364)+-(0.0,12.1958413180291)(200,34.8272727272727)+-(0.0,11.9229267303872)(220,34.7545454545455)+-(0.0,11.9815160673734)(240,33.4454545454545)+-(0.0,11.3059598120959)(260,32.7727272727273)+-(0.0,11.2018829586004)(280,31.7090909090909)+-(0.0,10.6821771699831)(300,30.6818181818182)+-(0.0,10.3815045327561) 
+};
+\addplot [
+color=mycolor1,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (20,55.7)(40,55.8)(60,47.9)(80,47.3)(100,43.7)(120,45.2)(140,40)(160,40.7)(180,40.1)(200,39.2)(220,40.3)(240,39)(260,33.7)(280,34.5)(300,35.3) 
+};
+\addlegendentry{var};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (20,55.7)(40,55.8)(60,47.9)(80,47.3)(100,43.7)(120,45.2)(140,40)(160,40.7)(180,40.1)(200,39.2)(220,40.3)(240,39)(260,33.7)(280,34.5)(300,35.3) 
+};
+\addplot [
+color=mycolor2,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (20,47.9)(40,38.6)(60,32.5)(80,26)(100,22.1)(120,18.6)(140,15.3)(160,14.7)(180,12.3)(200,10.8)(220,10.3)(240,9.1)(260,8.3)(280,7.6)(300,3.4) 
+};
+\addlegendentry{straddle};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=mycolor2,draw=mycolor2},
+forget plot
+]
+coordinates{
+ (20,47.9)(40,38.6)(60,32.5)(80,26)(100,22.1)(120,18.6)(140,15.3)(160,14.7)(180,12.3)(200,10.8)(220,10.3)(240,9.1)(260,8.3)(280,7.6)(300,3.4) 
+};
+\end{axis}
+\end{tikzpicture}%
