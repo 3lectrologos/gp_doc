@@ -1,0 +1,117 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+
+% defining custom colors
+\definecolor{mycolor1}{rgb}{0.2118,0.4588,0.5333}
+
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={x},
+ymin=0.9, ymax=1.1,
+ylabel={y},
+name=plot2]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,0.924967300363063)(150,1.0466862887441)(200,1.00565289840449)(250,1.02116234338564)(300,1.02452005279473)(400,0.996452406898542)(500,1.00887852603484)(650,0.992310968495821)(800,0.978812617802384)(1000,0.96992615801163) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={x},
+ymin=6, ymax=10,
+ylabel={y},
+at=(plot2.above north west), anchor=below south west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,9.59141280101165)(150,9.30482765436155)(200,9.54151769672686)(250,9.31092501678228)(300,9.1887558992492)(400,6.12716720259907)(500,6.17588611254115)(650,6.14055722207353)(800,6.03221654924249)(1000,6.05848123150269) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={x},
+ymin=0.5, ymax=1.5,
+ylabel={y},
+name=plot3,
+at=(plot2.below south west), anchor=above north west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,1.09116550406685)(150,1.2370657788277)(200,1.15433579624126)(250,1.17984468072332)(300,1.19189967216407)(400,0.98567009696758)(500,0.992878994427508)(650,0.978656740790619)(800,0.967087536556629)(1000,0.973060764952287) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={x},
+ymin=-1, ymax=0,
+ylabel={y},
+at=(plot3.below south west), anchor=above north west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,-0.353006518183408)(150,-0.386127857876543)(200,-0.338246960306514)(250,-0.376961703563851)(300,-0.37352239738223)(400,-0.596667025959836)(500,-0.564349668385825)(650,-0.60720284372038)(800,-0.611698357747793)(1000,-0.613423975807391) 
+};
+\end{axis}
+\end{tikzpicture}%

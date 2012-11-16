@@ -99,6 +99,8 @@
 \caption{Bootstrap marginal likelihood estimates for BGA-PE and Chlorophyll measurements (B = 1000 bootstrap samples).}
 \end{figure}
 
+\vspace{0.5in}
+
 \section{Jackknife}
 \setlength\figureheight{2.7in}
 \setlength\figurewidth{0.4\textwidth}
@@ -109,5 +111,93 @@
 \input{jk_chl.tex}
 \caption{Jackknife marginal likelihood estimates for BGA-PE (left) and Chlorophyll (right) measurements.}
 \end{figure}
+
+\section{Subsampling variation (sum)}
+\setlength\figureheight{1.8in}
+\setlength\figurewidth{0.9\textwidth}
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_1.tex}
+\caption{BGA-PE measurements, SE kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_2.tex}
+\caption{BGA-PE measurements, Matern-3 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_3.tex}
+\caption{BGA-PE measurements, Matern-5 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_1.tex}
+\caption{Chlorophyll measurements, SE kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_2.tex}
+\caption{Chlorophyll measurements, Matern-3 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_3.tex}
+\caption{Chlorophyll measurements, Matern-5 kernel.}
+\end{figure}
+
+\FloatBarrier
+
+\section{Subsampling variation (max)}
+\setlength\figureheight{1.8in}
+\setlength\figurewidth{0.9\textwidth}
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_1_max.tex}
+\caption{BGA-PE measurements, SE kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_2_max.tex}
+\caption{BGA-PE measurements, Matern-3 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_bgape_3_max.tex}
+\caption{BGA-PE measurements, Matern-5 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_1_max.tex}
+\caption{Chlorophyll measurements, SE kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_2_max.tex}
+\caption{Chlorophyll measurements, Matern-3 kernel.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\input{ss_chl_3_max.tex}
+\caption{Chlorophyll measurements, Matern-5 kernel.}
+\end{figure}
+
+%\setlength\figureheight{1.5in}
+%\setlength\figurewidth{0.18\textwidth}
+%\section{Resulting GP}
+%\begin{figure}[h]
+%\centering
+%\input{limnodir.tex}
+%\end{figure}
 
 \end{document}

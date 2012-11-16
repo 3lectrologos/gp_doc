@@ -1,0 +1,117 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+
+% defining custom colors
+\definecolor{mycolor1}{rgb}{0.2118,0.4588,0.5333}
+
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={Available measurements after subsampling},
+ymin=0, ymax=2,
+ylabel={$\log(\ell_{depth})$},
+name=plot2]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,1.28464123482135)(150,1.30085222948372)(200,1.29106224708763)(250,1.32883232404096)(300,1.32163105529977)(400,1.33788270577679)(500,1.34339381887143)(650,1.2193740530269)(800,1.20663003625432)(1000,1.22067233960945) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={Available measurements after subsampling},
+ymin=2, ymax=9,
+ylabel={$\log(\ell_{length})$},
+at=(plot2.above north west), anchor=below south west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,8.65680331137781)(150,7.76193847124714)(200,6.99355013808037)(250,6.96772328714926)(300,6.84072284193202)(400,6.75820693891811)(500,6.61893182791488)(650,3.8141482989447)(800,3.6502415932666)(1000,3.49826252221538) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={Available measurements after subsampling},
+ymin=0, ymax=1,
+ylabel={$\log(\sigma_f^2)$},
+name=plot3,
+at=(plot2.below south west), anchor=above north west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,0.861735015905964)(150,0.825779433983865)(200,0.729826496825578)(250,0.751504729921841)(300,0.745296590319235)(400,0.74244017604469)(500,0.746063333432776)(650,0.699896742041915)(800,0.687866075557332)(1000,0.682807099084056) 
+};
+\end{axis}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=100, xmax=1000,
+xlabel={Available measurements after subsampling},
+ymin=-3, ymax=0,
+ylabel={$\log(\sigma_n)$},
+at=(plot3.below south west), anchor=above north west]
+\addplot [
+color=mycolor1,
+solid,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (100,-0.580452651228829)(150,-0.625927240843236)(200,-0.695835481267178)(250,-0.722338558935502)(300,-0.745669362340944)(400,-0.763458322938135)(500,-0.794085653153423)(650,-1.79531110485315)(800,-1.9757549383265)(1000,-2.06234511461005) 
+};
+\end{axis}
+\end{tikzpicture}%
