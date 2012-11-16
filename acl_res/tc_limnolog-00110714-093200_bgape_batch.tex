@@ -1,0 +1,113 @@
+% This file was created by matlab2tikz v0.2.3.
+% Copyright (c) 2008--2012, Nico Schlömer <nico.schloemer@gmail.com>
+% All rights reserved.
+% 
+% 
+% 
+
+% defining custom colors
+\definecolor{mycolor1}{rgb}{0,0.75,0.75}
+
+\begin{tikzpicture}
+
+\begin{axis}[%
+tick label style={font=\footnotesize},
+label style={font=\footnotesize},
+label shift={-4pt},
+legend style={font=\footnotesize},
+view={0}{90},
+width=\figurewidth,
+height=\figureheight,
+scale only axis,
+xmin=0, xmax=250,
+xlabel={Samples},
+ymin=0, ymax=35,
+ylabel={Misclassification error},
+axis lines*=left,
+legend style={fill=none,draw=none,align=left}]
+\addplot [
+color=blue,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (247,1.1)(192,2.5)(156,2.9)(107,5.99999999999999)(84,9.09999999999999)(63,10.7)(51,12.7)(44,21.9)(37,26.1)(32,20.1) 
+};
+\addlegendentry{acl-amb};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=blue,draw=blue},
+forget plot
+]
+coordinates{
+ (247,1.1)(192,2.5)(156,2.9)(107,5.99999999999999)(84,9.09999999999999)(63,10.7)(51,12.7)(44,21.9)(37,26.1)(32,20.1) 
+};
+\addplot [
+color=green!50!black,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (229,1.9)(196,3)(162,3.79999999999999)(130,6.79999999999999)(92,17.7)(69,22.3)(53,24.6)(44,23.1)(36,33.7)(30,28.4) 
+};
+\addlegendentry{acl-amb batch-10 beta-5 init-50};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=green!50!black,draw=green!50!black},
+forget plot
+]
+coordinates{
+ (229,1.9)(196,3)(162,3.79999999999999)(130,6.79999999999999)(92,17.7)(69,22.3)(53,24.6)(44,23.1)(36,33.7)(30,28.4) 
+};
+\addplot [
+color=red,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (221,2.5)(188,4)(145,5.79999999999999)(110,11.8)(91,15.7)(64,23)(53,25.9)(43,29)(37,29.7)(30,28.4) 
+};
+\addlegendentry{acl-amb batch-30 beta-5 init-50};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=red,draw=red},
+forget plot
+]
+coordinates{
+ (221,2.5)(188,4)(145,5.79999999999999)(110,11.8)(91,15.7)(64,23)(53,25.9)(43,29)(37,29.7)(30,28.4) 
+};
+\addplot [
+color=mycolor1,
+solid,
+line width=1.0pt
+]
+coordinates{
+ (224,3.2)(189,4.2)(140,8.09999999999999)(101,15.7)(89,19.4)(64,23)(53,25.9)(43,29)(37,29.7)(30,28.4) 
+};
+\addlegendentry{acl-amb batch-60 beta-5 init-50};
+
+\addplot [
+color=blue,
+mark size=1.5pt,
+only marks,
+mark=*,
+mark options={solid,fill=mycolor1,draw=mycolor1},
+forget plot
+]
+coordinates{
+ (224,3.2)(189,4.2)(140,8.09999999999999)(101,15.7)(89,19.4)(64,23)(53,25.9)(43,29)(37,29.7)(30,28.4) 
+};
+\end{axis}
+\end{tikzpicture}%
