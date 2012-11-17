@@ -131,11 +131,16 @@ $H = \{\*x \in D \mid f(\*x) > h\}$ and $L = \{\*x \in D \mid f(\*x) \leq h\}$.
 %%% Sequential
 %%%--------------------------------------------------------------------------%%%
 \section{Sequential measurements}
+In the sequential case, points $\*x \in D$ are selected one by one for
+evaluation and, furthermore, the result $y_t$ of evaluating the function
+at the selected point at iteration $t$ is received before selecting the next
+point $\*x_{t+1}$.
+
+\subsection{The \acl algorithm}
 The \acl algorithm is based on iteratively training a GP model on the
 already evaluated points and using the predictive mean and variance of the
 model to guide the selection of the next point to be evaluated.
 
-\subsection{The \acl algorithm}
 At each iteration $t \geq 1$ the algorithm maintains a set $U_t$ of yet
 unclassified points, a set $H_t$ of points classified as lying above
 the threshold, and a set $L_t$ of points classified as lying below the
