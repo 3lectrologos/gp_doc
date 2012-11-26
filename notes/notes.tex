@@ -1,0 +1,172 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% ICML 2013 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use the following line _only_ if you're still using LaTeX 2.09.
+%\documentstyle[icml2013,epsf,natbib]{article}
+% If you rely on Latex2e packages, like most moden people use this:
+\documentclass{article}
+
+% For figures
+\usepackage{graphicx} % more modern
+%\usepackage{epsfig} % less modern
+\usepackage{subfigure} 
+
+% For citations
+\usepackage{natbib}
+
+% For algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% Alkis
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{amsthm}
+\usepackage{xspace}          % Controls space after user-defined command
+\usepackage{fixltx2e}        % For subscripts in normal text
+%
+
+% As of 2011, we use the hyperref package to produce hyperlinks in the
+% resulting PDF.  If this breaks your system, please commend out the
+% following usepackage line and replace \usepackage{icml2013} with
+% \usepackage[nohyperref]{icml2013} above.
+\usepackage{hyperref}
+
+% Packages hyperref and algorithmic misbehave sometimes.  We can fix
+% this with the following command.
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Employ the following version of the ``usepackage'' statement for
+% submitting the draft version of the paper for review.  This will set
+% the note in the first column to ``Under review.  Do not distribute.''
+%\usepackage{icml2013} 
+% Employ this version of the ``usepackage'' statement after the paper has
+% been accepted, when creating the final version.  This will set the
+% note in the first column to ``Proceedings of the...''
+\usepackage[accepted]{icml2013}
+
+% Alkis
+\newcommand{\todo}[1]{\noindent\texttt{\color[rgb]{0.5,0.1,0.1} TODO: #1}}
+
+\def\*#1{\bm{#1}}
+
+\newcommand*\LNot{\textbf{not}\xspace}
+\newcommand*\LAnd{\textbf{and}\xspace}
+\newcommand*\LET[2]{\STATE #1 $\gets$ #2}
+\newcommand*\Fcall[1]{\textsc{#1}}
+
+\newcommand{\sectref}[1]{\hyperref[#1]{\mbox{Section~\ref*{#1}}}}
+\newcommand{\figref}[1]{\hyperref[#1]{\mbox{Figure~\ref*{#1}}}}
+\newcommand{\tabref}[1]{\hyperref[#1]{\mbox{Table~\ref*{#1}}}}
+\newcommand{\algoref}[1]{\hyperref[#1]{\mbox{Algorithm~\ref*{#1}}}}
+\newcommand{\theoremref}[1]{\hyperref[#1]{\mbox{Theorem~\ref*{#1}}}}
+\newcommand{\lemmaref}[1]{\hyperref[#1]{\mbox{Lemma~\ref*{#1}}}}
+\newcommand{\corref}[1]{\hyperref[#1]{\mbox{Corollary~\ref*{#1}}}}
+\newcommand{\eqtref}[1]{\hyperref[#1]{\mbox{(\ref*{#1})}}}
+\newcommand{\appref}[1]{\hyperref[#1]{\mbox{Appendix~\ref*{#1}}}}
+
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+
+\newcommand{\twopartdef}[4]
+{
+	\left\{
+		\begin{array}{ll}
+			#1\,,& \mbox{if } #2 \\
+			#3\,,& \mbox{if } #4
+		\end{array}
+	\right.
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{cor}{Corollary}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newcommand{\acl}{\textsf{ACL}\xspace}
+\newcommand{\bacl}{\textsf{ACL\textsubscript{batch}}\xspace}
+\newcommand{\fb}{\mathop{\mathrm{fb}}}
+%
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Notes}
+
+\begin{document} 
+
+\twocolumn[
+\icmltitle{Notes}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2013
+% package.
+\icmlauthor{Alkis Gkotovos}{alkisg@student.ethz.ch}
+\icmladdress{Computer Science Department, ETH Zurich}
+
+% You may provide any keywords that you 
+% find helpful for describing your paper; these are used to populate 
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{}
+
+\vskip 0.3in
+]
+
+\begin{abstract}\end{abstract} 
+
+\section{Gaussian Processes}
+Given a vector of points $\*x_A = \left(\*x_v\right)_{v\in A}$ in input space
+and their respective measurements
+$\*y_A = \left(y_v\right)_{v\in A}$, where $y_v = f(\*x_v) + \epsilon$
+with $\mathbb{E}[\epsilon] = 0$ and $\mathbb{V}[\epsilon] = \sigma_n^2$,
+the predictive posterior distribution of any vector $\*x_B$ in input
+space is a Gaussian
+\begin{align*}
+f(\*x_B)\mid \*y_A \sim \mathcal{N}\left(\mu_{B\mid A}, \Sigma_{B\mid A}\right)
+\end{align*}
+with
+\begin{align*}
+\mu_{B\mid A} &= K_{BA}\left(K_{AA} + \sigma_n^2 I\right)^{-1}\*y_A\\
+\Sigma_{B\mid A} &= K_{BB} - K_{BA}\left(K_{AA} + \sigma_n^2 I\right)^{-1}K_{AB}.
+\end{align*}
+If $A = \left\{a_1, a_2, \ldots, a_{|A|}\right\}$, $B = \left\{b_1, b_2, \ldots, b_{|B|}\right\}$,
+and we define $k_{ij} = k(\*x_{a_i}, \*x_{b_j})$,
+then $K_{AB} = \left[k_{ij}\right]$ of size $|A|\times |B|$. Matrices $K_{AA}$, $K_{BA}$, and
+$K_{BB}$ are defined analogously.
+
+\section{Conditional Mutual Information}
+Note that
+\begin{align*}
+\*y_B\mid \*y_A \sim \mathcal{N}\left(\mu_{B\mid A}, \Sigma_{B\mid A} + \sigma_n^2 I\right)
+\end{align*}
+and
+\begin{align*}
+\*y_B\mid \*f_B \sim \mathcal{N}\left(0, \sigma_n^2 I\right).
+\end{align*}
+Then, the conditional mutual information between measurements $\*y_B$ and $f$,
+given measurements $\*y_A$ can be expressed as
+\begin{align*}
+&I(\*y_B; f \mid \*y_A)\\
+&=H(\*y_B\mid \*y_A) - H(\*y_B\mid \*y_A, f)\\
+&=H(\*y_B\mid \*y_A) - H(\*y_B\mid \*f_B)\\
+&=\frac{1}{2}\log\left\{(2\pi e)^{|B|}\left|\Sigma_{B\mid A} + \sigma_n^2 I\right|\right\} -
+  \frac{1}{2}\log\left\{(2\pi e)^{|B|}\left|\sigma_n^2 I\right|\right\}\\
+&=\frac{1}{2}\log\left\{\left|I + \sigma_n^{-2}\Sigma_{B\mid A}\right|\right\}.
+\end{align*}
+
+\end{document} 
+
+
+% This document was modified from the file originally made available by
+% Pat Langley and Andrea Danyluk for ICML-2K. This version was
+% created by Lise Getoor and Tobias Scheffer, it was slightly modified  
+% from the 2010 version by Thorsten Joachims & Johannes Fuernkranz, 
+% slightly modified from the 2009 version by Kiri Wagstaff and 
+% Sam Roweis's 2008 version, which is slightly modified from 
+% Prasad Tadepalli's 2007 version which is a lightly 
+% changed version of the previous year's version by Andrew Moore, 
+% which was in turn edited from those of Kristian Kersting and 
+% Codrina Lauth. Alex Smola contributed to the algorithmic style files.  
